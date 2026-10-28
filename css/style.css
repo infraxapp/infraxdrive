@@ -447,3 +447,8 @@ main>section:last-child:not(.end){padding-bottom:110px}
 @media(max-width:767px){[data-theme=light] .hero .img-light{height:30svh}[data-theme=light] .hero{padding-top:calc(30svh + 88px)}}
 .credits{max-width:1344px;margin:14px auto 0;font-size:.74rem;line-height:1.5;color:var(--mut)}.credits a{text-decoration:underline;text-underline-offset:2px}
 @media(max-width:767px){[data-theme=light] .hero .img-light{left:10px;right:auto;width:calc(100% - 20px)}.credits{padding:0}}
+/* studio cutout panel (Thar) */
+.studio{background:radial-gradient(120% 90% at 50% 35%,#FFFFFF 0%,#F2F2F0 55%,#E6E6E2 100%)!important}
+.studio img{object-fit:contain!important;object-position:50% 60%!important;padding:4% 6% 2%;box-sizing:border-box}
+.studio::after{content:none!important}
+[data-theme=dark] .studio,:root:not([data-theme=light]) .studio{background:radial-gradient(110% 85% at 50% 30%,#3A3A3E 0%,#232326 55%,#161618 100%)!important}
