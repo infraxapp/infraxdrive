@@ -15,6 +15,12 @@ const icon=c=>c.id==='offroader'?'i-mtn':'i-car';
 /* theme */
 const setTheme=t=>{document.documentElement.classList.add('theming');setTimeout(()=>document.documentElement.classList.remove('theming'),450);document.documentElement.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}$('meta[name=theme-color]').content=t==='light'?'#FAFAF8':'#0A0B0D'};
 $$('[data-theme-toggle]').forEach(b=>b.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light')));
+/* home: original big cards */
+const bigcard=(c,i)=>`<article class="cat tilt" data-i="${i}"><a class="cat-img${c.studio?" studio":""}" href="car.html?id=${c.id}" aria-label="${c.type} details"><img class="fade" src="${c.image}" srcset="${c.image.replace('.webp','-640.webp')} 640w, ${c.image} 1200w" sizes="(max-width:767px) 92vw, 560px" alt="${c.examples} — ${c.type}" loading="lazy" decoding="async" width="1200" height="750"><span class="cat-top"><svg><use href="#${icon(c)}"/></svg></span></a>
+<div class="cat-body"><h3 class="display sm"><a href="car.html?id=${c.id}">${c.type}</a></h3><p class="ex">${c.examples} <span class="ph">Example</span></p><p class="desc">${c.line}</p>
+<dl class="specs">${spec3(c)}</dl>
+<div class="cat-foot"><p class="price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}<span class="ph">Placeholder</span></p><button class="btn ghost press" data-type="${c.type}" aria-label="Reserve ${c.type}"><svg><use href="#i-arrow"/></svg></button></div></div></article>`;
+const hf=$('#homefleet');if(hf)hf.innerHTML=C.fleet.filter(c=>c.line).slice(0,2).map((c,i)=>bigcard(c,C.fleet.indexOf(c))).join('');
 /* fleet cards (compact, data-driven) */
 const nm=c=>c.name||c.examples||c.type;
 const card=(c,i)=>{const im=c.image||'img/fleet/suv7.webp',sm=im.replace('.webp','-640.webp');return `<article class="vc" data-i="${i}"><a class="vc-img${c.studio?" studio":""}" href="car.html?id=${c.id}" aria-label="${nm(c)} details"><img src="${sm}" srcset="${sm} 640w, ${im} 1200w" sizes="(max-width:767px) 46vw, (max-width:1099px) 45vw, 300px" alt="${nm(c)}" loading="lazy" decoding="async" width="640" height="400"></a>
