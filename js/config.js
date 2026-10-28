@@ -13,7 +13,7 @@ window.CONFIG={
  fleet:[
   {id:"suv7",type:"7-seater Premium SUV",short:"7-seater",image:"img/fleet/suv7.webp",examples:"Ford Endeavour or similar",seats:7,trans:"Automatic",drive:"4x4",fuel:"Diesel",price:10000,
    line:"Three rows, real luggage space and highway manners. The one for families, weddings and long drives.",uses:["Family trips","Weddings","Airport + luggage","Corporate offsites"]},
-  {id:"offroader",type:"4x4 Off-roader",short:"4x4",image:"img/fleet/offroader.webp",examples:"Mahindra Thar or similar",seats:4,trans:"Manual",drive:"4x4",fuel:"Diesel",roof:"Hard top",price:null,
+  {id:"offroader",studio:true,type:"4x4 Off-roader",short:"4x4",image:"img/fleet/offroader.webp",examples:"Mahindra Thar or similar",seats:4,trans:"Manual",drive:"4x4",fuel:"Diesel",roof:"Hard top",price:null,
    line:"Short overhangs, low-range gearbox, nothing it's scared of. Built for the hills and the weekend trail.",uses:["Hills","Off-road weekends","Rajasthan dunes","Road trips for two"]}
  ]
 };
