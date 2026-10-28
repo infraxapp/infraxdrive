@@ -16,7 +16,7 @@ const icon=c=>c.id==='offroader'?'i-mtn':'i-car';
 const setTheme=t=>{document.documentElement.classList.add('theming');setTimeout(()=>document.documentElement.classList.remove('theming'),450);document.documentElement.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}$('meta[name=theme-color]').content=t==='light'?'#FAFAF8':'#0A0B0D'};
 $$('[data-theme-toggle]').forEach(b=>b.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light')));
 /* fleet cards */
-const card=(c,i)=>`<article class="cat tilt" data-i="${i}"><a class="cat-img${c.studio?" studio":""}" href="car.html?type=${c.id}" aria-label="${c.type} details"><img class="fade" src="${c.image}" alt="${c.examples} — ${c.type}" loading="lazy" decoding="async" width="1200" height="750"><span class="cat-top"><svg><use href="#${icon(c)}"/></svg></span></a>
+const card=(c,i)=>`<article class="cat tilt" data-i="${i}"><a class="cat-img${c.studio?" studio":""}" href="car.html?type=${c.id}" aria-label="${c.type} details"><img class="fade" src="${c.image}" srcset="${c.image.replace('.webp','-640.webp')} 640w, ${c.image} 1200w" sizes="(max-width:767px) 92vw, 560px" alt="${c.examples} — ${c.type}" loading="lazy" decoding="async" width="1200" height="750"><span class="cat-top"><svg><use href="#${icon(c)}"/></svg></span></a>
 <div class="cat-body"><h3 class="display sm"><a href="car.html?type=${c.id}">${c.type}</a></h3><p class="ex">${c.examples} <span class="ph">Example</span></p><p class="desc">${c.line}</p>
 <dl class="specs">${spec3(c)}</dl>
 <div class="cat-foot"><p class="price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}<span class="ph">Placeholder</span></p><button class="btn ghost press" data-type="${c.type}" aria-label="Reserve ${c.type}"><svg><use href="#i-arrow"/></svg></button></div></div></article>`;
@@ -47,7 +47,7 @@ addEventListener('resize',()=>curBtn&&closeDD());apply()}
 const cd=$('#cardetail');
 if(cd){const id=new URLSearchParams(location.search).get('type');const c=C.fleet.find(x=>x.id===id)||C.fleet[0];
 document.title=`${c.type} on rent — ${C.brand}`;
-cd.innerHTML=`<div class="cd-img${c.studio?" studio":""}"><img class="fade" src="${c.image}" alt="${c.examples} — ${c.type}" width="1200" height="750" fetchpriority="high"></div>
+cd.innerHTML=`<div class="cd-img${c.studio?" studio":""}"><img class="fade" src="${c.image}" srcset="${c.image.replace('.webp','-640.webp')} 640w, ${c.image} 1200w" sizes="(max-width:767px) 96vw, 60vw" alt="${c.examples} — ${c.type}" width="1200" height="750" fetchpriority="high"></div>
 <div class="cd-copy"><a class="back" href="fleet.html">← All cars</a><p class="kicker">SUV class · ${c.seats} seats · ${c.drive}</p><h1 class="display md">${c.type}</h1>
 <p class="ex">${c.examples} <span class="ph">Example</span></p><p class="sub">${c.line}</p>
 <dl class="specs big"><div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div><div><dt>Drive</dt><dd>${c.drive}</dd></div><div><dt>Fuel</dt><dd>${c.fuel}</dd></div></dl><div class="uses-chips">${c.uses.map(u=>`<span>${u}</span>`).join('')}</div>
@@ -58,7 +58,7 @@ const others=C.fleet.filter(x=>x.id!==c.id);$('#cd-more').innerHTML=others.map(x
 /* fleet showcase */
 const sc=$('#showcase');
 if(sc){sc.innerHTML=C.fleet.map((c,i)=>`<article class="show" data-id="${c.id}">
-<a class="show-img${c.studio?" studio":""}" href="car.html?type=${c.id}"><img class="fade" src="${c.image}" alt="${c.examples} — ${c.type}" width="1200" height="750" ${i?'loading="lazy"':'fetchpriority="high"'}></a>
+<a class="show-img${c.studio?" studio":""}" href="car.html?type=${c.id}"><img class="fade" src="${c.image}" srcset="${c.image.replace('.webp','-640.webp')} 640w, ${c.image} 1200w" sizes="(max-width:767px) 92vw, 50vw" alt="${c.examples} — ${c.type}" width="1200" height="750" ${i?'loading="lazy"':'fetchpriority="high"'}></a>
 <div class="show-body"><p class="kicker">${String(i+1).padStart(2,'0')} · ${c.short}</p><h2 class="display md">${c.type}</h2><p class="ex">${c.examples} <span class="ph">Example</span></p><p class="sub">${c.line}</p>
 <dl class="specs big"><div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Drive</dt><dd>${c.drive}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div><div><dt>${c.roof?'Roof':'Fuel'}</dt><dd>${c.roof||c.fuel}</dd></div></dl>
 <div class="uses-chips">${c.uses.map(u=>`<span>${u}</span>`).join('')}</div>
@@ -99,3 +99,10 @@ document.addEventListener('touchstart',e=>{const a=e.target.closest('a[href]');a
 if(hover&&innerWidth>=768&&!matchMedia('(prefers-reduced-motion:reduce)').matches){
 document.addEventListener('mousemove',e=>{const c=e.target.closest('.tilt');$$('.tilt.tilting').forEach(x=>{if(x!==c){x.classList.remove('tilting');x.style.transform=''}});if(!c)return;c.classList.add('tilting');const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform=`perspective(900px) rotateY(${x*5}deg) rotateX(${-y*5}deg) translateY(-4px)`},{passive:true})}
 })();
+/* page transitions: shared car photo + non-VT fallback */
+(()=>{const H=document.documentElement,rm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+document.addEventListener('click',e=>{const a=e.target.closest&&e.target.closest('a[href]');if(!a||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey||a.target&&a.target!=='_self'||a.hasAttribute('download'))return;
+let u;try{u=new URL(a.href,location.href)}catch(_){return}if(u.origin!==location.origin||!/\.html$|\/$/.test(u.pathname))return;if(u.pathname===location.pathname&&u.search===location.search)return;
+const im=a.matches('.cat-img,.show-img')&&a.querySelector('img');if(im&&!H.classList.contains('nvt'))im.style.viewTransitionName='car-photo';
+if(H.classList.contains('nvt')&&!rm){e.preventDefault();H.classList.add('leaving');setTimeout(()=>{location.href=u.href},150)}});
+addEventListener('pageshow',()=>{H.classList.remove('leaving');document.querySelectorAll('img[style*="view-transition-name"]').forEach(i=>i.style.viewTransitionName='')})})();
