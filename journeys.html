@@ -1,8 +1,8 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Journeys — InfraX Drive</title><meta name="description" content="Hill trips, weekend getaways, weddings, corporate, airport and outstation car rentals from Gurugram.">
+<title>Journeys — InfraX Drive</title><meta name="description" content="SUV trips from Gurugram: hills, Rajasthan, off-road weekends, weddings, airport with luggage, corporate offsites.">
 <meta name="theme-color" content="#0A0B0D">
-<script>(function(){try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==="light"?"#F6F4EF":"#0A0B0D"}catch(e){}})()</script>
+<script>(function(){try{var t=localStorage.getItem("theme");if(!t)t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==="light"?"#FAFAF8":"#0A0B0D"}catch(e){}})()</script>
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="img/icon.svg"><link rel="apple-touch-icon" href="img/icon.svg">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="InfraX Drive">
 <link rel="preload" href="fonts/ClashDisplay-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="fonts/GeneralSans-400.woff2" as="font" type="font/woff2" crossorigin>
@@ -33,6 +33,8 @@
 <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
 <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></symbol>
 <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></symbol>
+<symbol id="i-ig" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r=".6"/></symbol>
+<symbol id="i-yt" viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="m10 9.5 5 2.5-5 2.5z"/></symbol>
 <symbol id="i-steps" viewBox="0 0 24 24"><path d="M4 18h4v-4h4v-4h4V6h4"/></symbol>
 </svg>
 
@@ -42,21 +44,25 @@
 <span class="city"><svg><use href="#i-pin"/></svg>Gurugram</span>
 <button class="tbtn press" data-theme-toggle aria-label="Toggle light/dark theme"><svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg></button>
 <button class="btn sm desk press" data-open-book>Reserve</button></header>
-<main id="main"><section class="phead"><p class="kicker">Journeys</p><h1 class="display md">Pick a horizon.</h1><p class=sub>Hill trips go out with a recovery kit. Ask for a hill-trained driver.</p></section><section class="sec tight"><div class="rail trips">
-<a class="trip big press" href="#" data-trip="Hill trip"><img class="fade" src="img/hills.webp" alt="Snow peaks above clouds" loading="lazy" width="1000" height="667"><div><span>Shimla · Manali · Spiti · Ladakh</span><h3 class="display sm">The hills</h3></div></a>
-<a class="trip press" href="#" data-trip="Weekend getaway"><img class="fade" src="img/desert.webp" alt="Open desert road" loading="lazy" width="1400" height="933"><div><span>Jaipur · Rishikesh · Agra</span><h3 class="display sm">Weekend escapes</h3></div></a>
-<a class="trip press" href="#" data-trip="Wedding"><img class="fade" src="img/wedding.webp" alt="White convertible parked beside trees" loading="lazy" width="1600" height="1067"><div><span>Arrivals · baraat · guest cars</span><h3 class="display sm">Weddings</h3></div></a>
+<main id="main"><section class="phead"><p class="kicker">Journeys</p><h1 class="display md">Where SUVs<br><em>make sense.</em></h1><p class=sub>Hill and trail trips go out with a recovery kit. Ask for a hill-trained driver.</p></section><section class="sec tight"><div class="rail trips">
+<a class="trip big press" href="#" data-trip="Hill trip"><img class="fade" src="img/hills.webp" alt="Snow peaks above clouds" loading="lazy" width="1000" height="667"><div><span>Shimla · Manali · Rishikesh · Spiti</span><h3 class="display sm">The hills</h3></div></a>
+<a class="trip press" href="#" data-trip="Rajasthan trip"><img class="fade" src="img/desert.webp" alt="Open desert road" loading="lazy" width="1000" height="667"><div><span>Jaipur · Jaisalmer · the dunes</span><h3 class="display sm">Rajasthan</h3></div></a>
+<a class="trip press" href="#" data-trip="Off-road weekend"><img class="fade" src="img/hero-dark-900.webp" alt="Red 4x4 climbing through mud" loading="lazy" width="900" height="506"><div><span>Trails within a few hours of NCR</span><h3 class="display sm">Off-road weekends</h3></div></a>
 </div></section>
-<section class="sec"><div class="sec-head"><p class="kicker">And everything in between</p></div><div class="uses-grid">
-<button class="use press" data-trip="Corporate"><svg><use href="#i-wheel"/></svg><h3>Corporate</h3><p>Executive transfers, offsites, monthly contracts.</p></button>
-<button class="use press" data-trip="Airport transfer"><svg><use href="#i-clock"/></svg><h3>IGI airport</h3><p>Pickups and drops, timed to your flight.</p></button>
-<button class="use press" data-trip="Outstation"><svg><use href="#i-mtn"/></svg><h3>Outstation</h3><p>One-way or round trip, anywhere the road goes.</p></button>
-<button class="use press" data-trip="Monthly rental"><svg><use href="#i-cal"/></svg><h3>Monthly</h3><p>A car for the month without buying one.</p></button>
-<button class="use press" data-trip="Film shoot"><svg><use href="#i-video"/></svg><h3>Shoots</h3><p>Picture cars and crew movement.</p></button>
-<button class="use press" data-trip="EV city drive"><svg><use href="#i-bolt"/></svg><h3>Electric city</h3><p>Quiet, zero-tailpipe days around NCR.</p></button></div></section><section class="sec end"><h2 class="display xl">The road's<br><em>waiting.</em></h2><div class="hero-cta"><button class="btn press" data-open-book>Check dates<svg><use href="#i-arrow"/></svg></button><a class="link" data-wa href="#">WhatsApp us</a></div></section></main>
-<footer class="foot"><div class="foot-top"><div class="logo"><img src="img/icon.svg" alt="" width="26" height="26"><span data-brand>InfraX Drive</span></div>
-<nav aria-label="Footer"><a href="index.html">Home</a><a href="fleet.html">Fleet</a><a href="journeys.html">Journeys</a><a href="how-it-works.html">How it works</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></nav></div>
-<div class="foot-bot"><p>An InfraX Buildcon Pvt Ltd venture · Gurugram</p><p>© <span data-yr></span></p></div></footer>
+<section class="sec"><div class="sec-head"><p class="kicker">And closer to home</p></div><div class="uses-grid">
+<button class="use press" data-trip="Wedding" data-type="7-seater Premium SUV"><svg><use href="#i-wheel"/></svg><h3>Weddings</h3><p>Arrivals, baraat convoys, guest movement.</p></button>
+<button class="use press" data-trip="Airport with luggage" data-type="7-seater Premium SUV"><svg><use href="#i-clock"/></svg><h3>Airport + luggage</h3><p>IGI runs with room for every bag.</p></button>
+<button class="use press" data-trip="Corporate offsite" data-type="7-seater Premium SUV"><svg><use href="#i-steps"/></svg><h3>Corporate offsites</h3><p>Teams to Neemrana, Rishikesh or the hills.</p></button>
+<button class="use press" data-trip="Family trip" data-type="7-seater Premium SUV"><svg><use href="#i-car"/></svg><h3>Family trips</h3><p>Seven seats, one car, no convoy.</p></button>
+<button class="use press" data-trip="Off-road weekend" data-type="4x4 Off-roader"><svg><use href="#i-mtn"/></svg><h3>Off-road weekends</h3><p>Low range, high clearance, mud welcome.</p></button>
+<button class="use press" data-trip="Outstation" data-type="7-seater Premium SUV"><svg><use href="#i-pin"/></svg><h3>Outstation</h3><p>One-way or round trip, with or without a driver.</p></button></div></section><section class="sec end"><h2 class="display xl">Big cars.<br><em>Bigger plans.</em></h2><div class="hero-cta"><button class="btn press" data-open-book>Check dates<svg><use href="#i-arrow"/></svg></button><a class="link" data-wa href="#">WhatsApp us</a></div></section></main>
+<footer class="foot"><div class="foot-grid">
+<div class="foot-brand"><div class="logo"><img src="img/icon.svg" alt="" width="28" height="28"><span data-brand>InfraX Drive</span></div><p>Premium SUVs & 4x4s on rent. Gurugram · Delhi NCR · wherever the road goes.</p>
+<div class="social"><a href="#" aria-label="Instagram (placeholder)"><svg><use href="#i-ig"/></svg></a><a href="#" aria-label="YouTube (placeholder)"><svg><use href="#i-yt"/></svg></a><a data-wa href="#" aria-label="WhatsApp"><svg><use href="#i-chat"/></svg></a></div></div>
+<div class="fcol"><h4>Explore</h4><a href="fleet.html">Fleet</a><a href="journeys.html">Journeys</a><a href="how-it-works.html">How it works</a><a href="faq.html">FAQ</a></div>
+<div class="fcol"><h4>Book</h4><a data-wa href="#">WhatsApp</a><a data-phone href="#"></a><a href="contact.html">Plan a trip</a></div>
+<div class="fcol"><h4>Visit</h4><p data-address></p><p data-hours></p></div></div>
+<div class="foot-bot"><p>© <span data-yr></span> <span data-brand>InfraX Drive</span> · An InfraX Buildcon Pvt Ltd venture</p><p>Prices, address and social links are placeholders.</p></div></footer>
 <a class="fab press" data-wa href="#" aria-label="Chat on WhatsApp"><svg><use href="#i-chat"/></svg></a>
 <form id="sheetbook" class="bookform sheet-panel only-sheet" aria-label="Reserve a car"><div class="grab" aria-hidden="true"></div>
 <div class="sheet-head"><h2>Reserve</h2><button type="button" class="close press" aria-label="Close" data-close><svg><use href="#i-x"/></svg></button></div>
