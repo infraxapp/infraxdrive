@@ -470,3 +470,4 @@ html.nvt.leaving body{opacity:0;transition:opacity .15s ease-in}
 #cardetail:empty{min-height:752px}@media(max-width:767px){#cardetail:empty{min-height:1000px}}
 #showcase:empty{min-height:1226px}@media(max-width:767px){#showcase:empty{min-height:1808px}}
 .logo b,[data-brand] b{font-weight:800;letter-spacing:.02em}
+.logo .lg-lt,.logo .lg-dk{height:auto;display:block}.bar .logo img{width:130px}.foot .logo img{width:156px}.logo .lg-lt{display:none}[data-theme=light] .logo .lg-lt{display:block}[data-theme=light] .logo .lg-dk{display:none}
