@@ -550,3 +550,4 @@ html.nvt.leaving body{opacity:0;transition:opacity .15s ease-in}
 @media(max-width:767px){.hx-kick{white-space:normal;max-width:100%;line-height:1.4}.hx .hero-cta{gap:16px}.hx .hero-cta .btn{min-width:0}.hx .hero-cta .link{white-space:nowrap;font-size:.95rem}
  .hx-trust{display:flex;flex-wrap:wrap;gap:8px}.hx-trust li{white-space:nowrap;padding:6px 10px;border-radius:999px;border:1px solid rgba(var(--fgrgb),.08);background:rgba(var(--glassrgb),.5)}}
 [data-theme=light] .ph{color:#A8470A;border-color:rgba(168,71,10,.5)}
+.cinfo2.solo{grid-template-columns:1fr}.cinfo2.solo .infocol{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
