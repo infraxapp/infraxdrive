@@ -6,7 +6,7 @@
 <link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" sizes="32x32" href="img/icon-32.png?v=26cb3f08"><link rel="apple-touch-icon" href="img/icon-180.png?v=26cb3f08">
 <meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="4X4 Drive">
 <link rel="preload" href="fonts/ClashDisplay-600.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="fonts/GeneralSans-400.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="css/style.css?v=48ec306e"></head><body data-page="fleet.html">
+<link rel="stylesheet" href="css/style.css?v=b7fd31b4"></head><body data-page="fleet.html">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
 <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></symbol>
 <symbol id="i-car" viewBox="0 0 24 24"><path d="M5 17h14v-4.5l-1.8-5A2 2 0 0 0 15.3 6H8.7a2 2 0 0 0-1.9 1.5L5 12.5zM5 12.5h14M5 17v2M19 17v2"/><circle cx="8" cy="14.8" r=".6"/><circle cx="16" cy="14.8" r=".6"/></symbol>
@@ -45,10 +45,12 @@
 <span class="city"><svg><use href="#i-pin"/></svg>Gurugram</span>
 <button class="tbtn press" data-theme-toggle aria-label="Toggle light/dark theme"><svg class="sun"><use href="#i-sun"/></svg><svg class="moon"><use href="#i-moon"/></svg></button>
 <button class="btn sm desk press" data-open-book>Reserve</button></header>
-<main id="main"><section class="phead"><p class="kicker">The fleet</p><h1 class="display md">Find your<br><em>car.</em></h1><p class=sub>Filter by what matters. Every car is delivered to your door in Gurugram & Delhi NCR.</p></section>
-<section class="sec tight"><div class="fbar"><div class="filters" id="filters" aria-label="Filter and sort"></div><p class="count" id="count" aria-live="polite"></p></div>
-<div class="vgrid" id="fleetgrid"></div><div class="empty vempty" id="empty" hidden><h3>No cars match these filters.</h3><p>Clear a filter, or tell us what you need below.</p></div>
-<div class="dd" id="dd" role="listbox"></div><div class="ddscrim" id="ddscrim"></div></section>
+<main id="main"><section class="fx-head"><div class="fx-band"><div class="fx-copy"><p class="kicker">The fleet · Gurugram &amp; Delhi NCR</p><h1 class="display md">Pick your<br><em>drive.</em></h1><p class="sub">Self-drive or with a driver. Every car comes to your door, with a recorded 360° handover.</p></div>
+<dl class="fx-stats" id="fxstats"></dl></div></section>
+<section class="sec tight fx"><div class="fx-tabs" id="fxtabs" role="toolbar" aria-label="Category"></div>
+<div class="fbar"><div class="filters" id="filters" aria-label="Filter and sort"></div><p class="count" id="count" aria-live="polite"></p></div>
+<h2 class="fx-vh">Available cars</h2><div class="fgrid" id="fleetgrid"></div><div class="empty vempty" id="empty" hidden><h3>No cars match these filters.</h3><p>Clear a filter, or tell us what you need below.</p></div>
+<div class="dd" id="dd" role="listbox" aria-label="Filter options"></div><div class="ddscrim" id="ddscrim"></div></section>
 <section class="sec"><form class="request" id="request"><div><p class="kicker">Need a different car?</p><h3 class="display sm">Tell us what you need.</h3><p class="sub">It's not on our lot today — we'll tell you honestly if we can arrange it.</p></div>
 <div class="rq-row"><label class="f"><span>I need a</span><select aria-label="Car type needed"><option>sedan</option><option>hatchback</option><option>electric</option><option>luxury</option><option>tempo traveller</option></select></label><button class="btn ghost press" type="submit">Ask on WhatsApp<svg><use href="#i-arrow"/></svg></button></div></form></section>
 <section class="sec end"><h2 class="display xl">Big cars.<br><em>Bigger plans.</em></h2><div class="hero-cta"><button class="btn press" data-open-book>Check dates<svg><use href="#i-arrow"/></svg></button><a class="link" data-wa href="#">WhatsApp us</a></div></section></main>
@@ -80,4 +82,4 @@
 <button data-open-book class="press book"><svg><use href="#i-cal"/></svg>Book</button>
 <button data-open-more class="press"><svg><use href="#i-more"/></svg>More</button></nav>
 <div class="scrim" data-close></div>
-<script src="js/config.js?v=2f7cb7b6"></script><script src="js/app.js?v=4a9c004c" defer></script></body></html>
+<script src="js/config.js?v=b9ae7b6e"></script><script src="js/app.js?v=a809b008" defer></script></body></html>
