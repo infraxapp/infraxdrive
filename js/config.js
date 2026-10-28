@@ -3,7 +3,7 @@
    price: ₹/day number, or null for "On request". ALL prices are PLACEHOLDERS.
    Contact details marked "placeholder" must be replaced. */
 window.CONFIG={
- brand:"InfraX Drive",
+ brand:"4X4 Drive",
  whatsapp:"919988226648",
  phone:"+91 99882 26648",
  email:"hello@example.com",               // placeholder

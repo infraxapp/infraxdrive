@@ -1,6 +1,6 @@
 (()=>{const C=window.CONFIG,$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const mob=()=>matchMedia('(max-width:767px)').matches,hover=matchMedia('(hover:hover) and (pointer:fine)').matches;
-$$('[data-brand]').forEach(e=>e.textContent=C.brand);
+$$('[data-brand]').forEach(e=>e.innerHTML=C.brand.replace('4X4','<b>4X4</b>'));
 $$('[data-yr]').forEach(e=>e.textContent=new Date().getFullYear());
 $$('[data-phone]').forEach(e=>{e.innerHTML=e.classList.contains('crow')?`<svg><use href="#i-phone"/></svg><span><small>Phone</small>${C.phone}</span>`:C.phone;e.href='tel:'+C.phone.replace(/\s/g,'')});
 $$('[data-email]').forEach(e=>{e.innerHTML=e.classList.contains('crow')?`<svg><use href="#i-mail"/></svg><span><small>Email <span class="ph">Placeholder</span></small>${C.email}</span>`:C.email;e.href='mailto:'+C.email});
