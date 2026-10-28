@@ -1,9 +1,10 @@
 (()=>{const C=window.CONFIG,$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const mob=()=>matchMedia('(max-width:767px)').matches,hover=matchMedia('(hover:hover) and (pointer:fine)').matches;
+$$('[data-req]').forEach(e=>{if(!(C[e.dataset.req]||'').trim())e.remove()});$$('[data-email]').forEach(e=>{if(!(C.email||'').trim())e.remove()});$$('[data-social]').forEach(e=>{const u=(C.social||{})[e.dataset.social];if(!u||u==='#')e.remove();else{e.href=u;e.target='_blank';e.rel='noopener'}});$$('.cinfo2').forEach(e=>{if(!e.querySelector('.mapcard'))e.classList.add('solo')});
 $$('[data-brand]').forEach(e=>e.innerHTML=C.brand.replace('4X4','<b>4X4</b>'));
 $$('[data-yr]').forEach(e=>e.textContent=new Date().getFullYear());
 $$('[data-phone]').forEach(e=>{e.innerHTML=e.classList.contains('crow')?`<svg><use href="#i-phone"/></svg><span><small>Phone</small>${C.phone}</span>`:C.phone;e.href='tel:'+C.phone.replace(/\s/g,'')});
-$$('[data-email]').forEach(e=>{e.innerHTML=e.classList.contains('crow')?`<svg><use href="#i-mail"/></svg><span><small>Email <span class="ph">Placeholder</span></small>${C.email}</span>`:C.email;e.href='mailto:'+C.email});
+$$('[data-email]').forEach(e=>{e.innerHTML=e.classList.contains('crow')?`<svg><use href="#i-mail"/></svg><span><small>Email</small>${C.email}</span>`:C.email;e.href='mailto:'+C.email});
 $$('[data-tel]').forEach(e=>e.href='tel:'+C.phone.replace(/\s/g,''));$$('[data-phone-txt]').forEach(e=>e.textContent=C.phone);$$('[data-email-plain]').forEach(e=>{e.textContent=C.email;e.href='mailto:'+C.email});
 $$('[data-address]').forEach(e=>e.textContent=C.address);$$('[data-hours]').forEach(e=>e.textContent=C.hours);
 const wa=t=>`https://wa.me/${C.whatsapp}?text=${encodeURIComponent(t)}`;
@@ -17,16 +18,16 @@ const setTheme=t=>{document.documentElement.classList.add('theming');setTimeout(
 $$('[data-theme-toggle]').forEach(b=>b.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light')));
 /* home: original big cards */
 const bigcard=(c,i)=>`<article class="cat tilt" data-i="${i}"><a class="cat-img${c.studio?" studio":""}" href="car.html?id=${c.id}" aria-label="${c.type} details"><img class="fade" src="${c.image}" srcset="${c.image.replace('.webp','-640.webp')} 640w, ${c.image} 1200w" sizes="(max-width:767px) 92vw, 560px" alt="${c.examples} — ${c.type}" loading="lazy" decoding="async" width="1200" height="750"><span class="cat-top"><svg><use href="#${icon(c)}"/></svg></span></a>
-<div class="cat-body"><h3 class="display sm"><a href="car.html?id=${c.id}">${c.type}</a></h3><p class="ex">${c.examples} <span class="ph">Example</span></p><p class="desc">${c.line}</p>
+<div class="cat-body"><h3 class="display sm"><a href="car.html?id=${c.id}">${c.type}</a></h3><p class="ex">${c.examples}</p><p class="desc">${c.line}</p>
 <dl class="specs">${spec3(c)}</dl>
-<div class="cat-foot"><p class="price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}<span class="ph">Placeholder</span></p><button class="btn ghost press" data-type="${c.type}" aria-label="Reserve ${c.type}"><svg><use href="#i-arrow"/></svg></button></div></div></article>`;
+<div class="cat-foot"><p class="price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}</p><button class="btn ghost press" data-type="${c.type}" aria-label="Reserve ${c.type}"><svg><use href="#i-arrow"/></svg></button></div></div></article>`;
 const hf=$('#homefleet');if(hf)hf.innerHTML=C.fleet.filter(c=>c.line).slice(0,2).map((c,i)=>bigcard(c,C.fleet.indexOf(c))).join('');
 /* fleet cards (compact, data-driven) */
 const nm=c=>c.name||c.examples||c.type;
 const card=(c,i)=>{const im=c.image||'img/fleet/suv7.webp',sm=im.replace('.webp','-640.webp');return `<article class="vc" data-i="${i}"><a class="vc-img${c.studio?" studio":""}" href="car.html?id=${c.id}" aria-label="${nm(c)} details"><img src="${sm}" srcset="${sm} 640w, ${im} 1200w" sizes="(max-width:767px) 46vw, (max-width:1099px) 45vw, 300px" alt="${nm(c)}" loading="lazy" decoding="async" width="640" height="400"></a>
 <div class="vc-body"><span class="vchip">${c.category||c.short||'Car'}</span><h3><a href="car.html?id=${c.id}">${nm(c)}</a></h3><p class="vc-model">${c.model||c.type||''}</p>
 <ul class="vc-spec" aria-label="Specs"><li title="Seats"><svg aria-hidden="true"><use href="#i-seat"/></svg>${c.seats}</li><li title="Fuel"><svg aria-hidden="true"><use href="#i-fuel"/></svg>${c.fuel}</li><li title="Gearbox"><svg aria-hidden="true"><use href="#i-gear"/></svg>${gear(c)}</li><li title="Drive"><svg aria-hidden="true"><use href="#i-wheel"/></svg>${c.drive||'2WD'}</li></ul>
-<div class="vc-foot"><p class="vc-price">${inr(c.price)}${c.price!=null?'<small>/day</small>':''} <span class="ph">${c.price!=null?'Placeholder':'Example'}</span></p><div class="vc-act"><a class="link sm" href="car.html?id=${c.id}">Details</a><button class="btn sm press" data-type="${c.type||nm(c)}" aria-label="Reserve ${nm(c)}">Reserve</button></div></div></div></article>`};
+<div class="vc-foot"><p class="vc-price">${inr(c.price)}${c.price!=null?'<small>/day</small>':''}</p><div class="vc-act"><a class="link sm" href="car.html?id=${c.id}">Details</a><button class="btn sm press" data-type="${c.type||nm(c)}" aria-label="Reserve ${nm(c)}">Reserve</button></div></div></div></article>`};
 const grid=$('#fleetgrid');
 if(grid){const lim=+grid.dataset.limit||999;grid.innerHTML=C.fleet.slice(0,lim).map(card).join('')}
 /* filters + sort */
@@ -63,7 +64,7 @@ cd.innerHTML=`<div class="cd-img${c.studio?" studio":""}"><img class="fade" src=
 <div class="cd-copy"><a class="back" href="fleet.html">← All cars</a><p class="kicker">${c.category||""} · ${c.seats} seats · ${c.drive||""}</p><h1 class="display md">${nm(c)}</h1>
 <p class="ex">${c.model||""}</p><p class="sub">${c.line||""}</p>
 <dl class="specs big"><div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div><div><dt>Drive</dt><dd>${c.drive}</dd></div><div><dt>Fuel</dt><dd>${c.fuel}</dd></div></dl><div class="uses-chips">${(c.uses||[]).map(u=>`<span>${u}</span>`).join('')}</div>
-<p class="price xl-price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}<span class="ph">Placeholder</span></p>
+<p class="price xl-price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}</p>
 <div class="hero-cta"><button class="btn press" data-type="${c.type}">Reserve this car<svg><use href="#i-arrow"/></svg></button><a class="link" data-wa href="${wa(`Hi ${C.brand}, question about the ${c.type}.`)}" target="_blank" rel="noopener">Ask on WhatsApp</a></div></div>`;
 $('#cd-included').innerHTML=['Doorstep delivery & pickup in Gurugram / Delhi NCR','360° video walkaround at handover and return','Comprehensive insurance','24×7 roadside & WhatsApp support','Recovery kit on hill & off-road trips','Driver option available'].map(x=>`<li><svg><use href="#i-check"/></svg>${x}</li>`).join('');
 const others=C.fleet.filter(x=>x.id!==c.id).slice(0,4);$('#cd-more').innerHTML=others.map(x=>card(x,C.fleet.indexOf(x))).join('')}
