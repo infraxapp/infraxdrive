@@ -28,8 +28,17 @@ const card=(c,i)=>{const im=c.image||'img/fleet/suv7.webp',sm=im.replace('.webp'
 <div class="vc-body"><span class="vchip">${c.category||c.short||'Car'}</span><h3><a href="car.html?id=${c.id}">${nm(c)}</a></h3><p class="vc-model">${c.model||c.type||''}</p>
 <ul class="vc-spec" aria-label="Specs"><li title="Seats"><svg aria-hidden="true"><use href="#i-seat"/></svg>${c.seats}</li><li title="Fuel"><svg aria-hidden="true"><use href="#i-fuel"/></svg>${c.fuel}</li><li title="Gearbox"><svg aria-hidden="true"><use href="#i-gear"/></svg>${gear(c)}</li><li title="Drive"><svg aria-hidden="true"><use href="#i-wheel"/></svg>${c.drive||'2WD'}</li></ul>
 <div class="vc-foot"><p class="vc-price">${inr(c.price)}${c.price!=null?'<small>/day</small>':''}</p><div class="vc-act"><a class="link sm" href="car.html?id=${c.id}">Details</a><button class="btn sm press" data-type="${c.type||nm(c)}" aria-label="Reserve ${nm(c)}">Reserve</button></div></div></div></article>`};
-const grid=$('#fleetgrid');
-if(grid){const lim=+grid.dataset.limit||999;grid.innerHTML=C.fleet.slice(0,lim).map(card).join('')}
+const fcard=(c,i)=>{const im=c.cutout||c.image||'img/fleet/suv7.webp',sm=im.replace('.webp','-640.webp'),u=`car.html?id=${c.id}`;
+const sp=[['i-seat',c.seats,'Seats'],['i-fuel',c.fuel,'Fuel'],['i-gear',`<i class="g-l">${c.trans}</i><i class="g-s">${gear(c)}</i>`,'Gearbox'],['i-wheel',c.drive||'2WD','Drive']];
+return `<article class="fc" data-i="${i}"><a class="fc-stage${c.cutout||c.studio?'':' photo'}" href="${u}" aria-hidden="true" tabindex="-1"><span class="fc-cat">${c.category||'Car'}</span><img src="${sm}" srcset="${sm} 640w, ${im} 1200w" sizes="(max-width:767px) 92vw, (max-width:1099px) 46vw, 420px" alt="${nm(c)} ${c.model||''}" loading="${i<3?'eager':'lazy'}" decoding="async" width="1200" height="750"></a>
+<div class="fc-body"><div class="fc-head"><div><h3><a href="${u}">${nm(c)}</a></h3><p class="fc-model">${c.model||c.type||''}</p></div><p class="fc-price">${c.price!=null?`<small>from</small><span>${inr(c.price)}<small> /day</small></span>`:'<span class="fc-req">Price on request</span>'}</p></div>
+<ul class="fc-spec" aria-label="Specs">${sp.map(([ic,v,l])=>`<li><svg aria-hidden="true"><use href="#${ic}"/></svg><b>${v}</b><span>${l}</span></li>`).join('')}</ul>
+<div class="fc-act"><a class="btn ghost sm press" href="${u}">View details</a><button class="btn sm press" data-type="${c.type||nm(c)}" aria-label="Reserve ${nm(c)}">Reserve<svg><use href="#i-arrow"/></svg></button></div></div></article>`};
+const fx=$('#fxstats');if(fx){const pr=C.fleet.map(c=>c.price).filter(p=>p!=null),cats=[...new Set(C.fleet.map(c=>c.category).filter(Boolean))],mx=Math.max(...C.fleet.map(c=>c.seats||0));
+fx.innerHTML=[[C.fleet.length,C.fleet.length===1?'Car':'Cars'],[cats.length,cats.length===1?'Category':'Categories'],[mx,'Max seats'],[pr.length?inr(Math.min(...pr)):'On request',pr.length?'Per day, from':'Pricing']].map(([v,l])=>`<div><dd>${v}</dd><dt>${l}</dt></div>`).join('')}
+const grid=$('#fleetgrid');const isF=grid&&grid.classList.contains('fgrid');const cardF=isF?fcard:card;
+const sizeG=n=>{if(isF)grid.dataset.n=n>=3?'many':n};
+if(grid){const lim=+grid.dataset.limit||999;grid.innerHTML=C.fleet.slice(0,lim).map(cardF).join('');sizeG(Math.min(lim,C.fleet.length))}
 /* filters + sort */
 const fl=$('#filters');let curBtn=null;const dd=$('#dd'),scr=$('#ddscrim');
 if(fl){const uniq=k=>[...new Set(C.fleet.map(c=>c[k]).filter(v=>v!=null))];
@@ -40,9 +49,11 @@ const sel={};const lbl=(k,v)=>k==='seats'?v+' seats':k==='price'?PB.find(b=>b[0]
 const q=new URLSearchParams(location.search);['category','fuel','seats','trans'].forEach(k=>q.get(k)&&(sel[k]=q.get(k)));
 const ok=c=>Object.entries(sel).every(([k,v])=>k==='sort'||(k==='price'?PB.find(b=>b[0]===v)[2](c.price):String(c[k])===v));
 const renderF=()=>{fl.innerHTML=groups.map(([k,l])=>sel[k]?`<button class="fbtn set press" data-k="${k}" aria-haspopup="listbox" aria-expanded="false">${k==='sort'?'':l+': '}${lbl(k,sel[k])}<span class="clr" data-clr="${k}" role="button" aria-label="Clear ${l}"><svg><use href="#i-x"/></svg></span></button>`:`<button class="fbtn press${k==='sort'?' sortb':''}" data-k="${k}" aria-haspopup="listbox" aria-expanded="false">${l}<svg class="chev"><use href="#i-chev"/></svg></button>`).join('')+(Object.keys(sel).length?'<button class="clearall" data-clrall>Clear all</button>':'')};
+const tb=$('#fxtabs');const renderT=()=>{if(!tb)return;const cats=uniq('category');tb.innerHTML=[['','All',C.fleet.length],...cats.map(c=>[c,c,C.fleet.filter(x=>x.category===c).length])].map(([v,l,n])=>`<button class="fx-tab press" data-cat="${v}" aria-pressed="${(sel.category||'')===v}">${l}<span>${n}</span></button>`).join('')};
+if(tb)tb.addEventListener('click',e=>{const b=e.target.closest('[data-cat]');if(!b)return;if(b.dataset.cat)sel.category=b.dataset.cat;else delete sel.category;apply()});
 const apply=()=>{let list=C.fleet.map((c,i)=>[c,i]).filter(([c])=>ok(c));const s=sel.sort,P=c=>c.price==null?1e9:c.price;
 if(s==='pa')list.sort((a,b)=>P(a[0])-P(b[0]));if(s==='pd')list.sort((a,b)=>(b[0].price||0)-(a[0].price||0));if(s==='sd')list.sort((a,b)=>b[0].seats-a[0].seats);
-grid.innerHTML=list.map(([c,i])=>card(c,i)).join('');$('#count').textContent=`${list.length} car${list.length===1?'':'s'}`+(list.length<C.fleet.length?` of ${C.fleet.length}`:'');$('#empty').hidden=list.length>0;renderF()};
+grid.innerHTML=list.map(([c,i])=>cardF(c,i)).join('');sizeG(list.length);renderT();$('#count').textContent=`${list.length} car${list.length===1?'':'s'}`+(list.length<C.fleet.length?` of ${C.fleet.length}`:'');$('#empty').hidden=list.length>0;renderF()};
 const closeDD=f=>{dd.classList.remove('open');scr.classList.remove('open');if(curBtn&&f){const b=$(`.fbtn[data-k="${curBtn.dataset.k}"]`);b&&b.focus()}if(curBtn)curBtn.setAttribute('aria-expanded','false');curBtn=null};
 const openDD=b=>{const k=b.dataset.k,[,l,vals]=groups.find(g=>g[0]===k);curBtn=b;b.setAttribute('aria-expanded','true');dd.setAttribute('aria-label',l);
 dd.innerHTML=`<h4>${l}</h4>`+[['',k==='sort'?'Recommended':'All'],...vals.map(v=>[String(v),lbl(k,v)])].map(([v,t])=>`<button role="option" data-v="${v}" aria-selected="${(sel[k]||'')===v}">${t}</button>`).join('');
