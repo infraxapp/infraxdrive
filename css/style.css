@@ -452,3 +452,19 @@ main>section:last-child:not(.end){padding-bottom:110px}
 .studio img{object-fit:contain!important;object-position:50% 60%!important;padding:4% 6% 2%;box-sizing:border-box}
 .studio::after{content:none!important}
 [data-theme=dark] .studio,:root:not([data-theme=light]) .studio{background:radial-gradient(110% 85% at 50% 30%,#3A3A3E 0%,#232326 55%,#161618 100%)!important}
+/* ---- page transitions v8 ---- */
+.bar{view-transition-name:site-bar}.tabbar{view-transition-name:site-tabbar}
+.cd-img img{view-transition-name:car-photo}
+::view-transition-group(site-bar),::view-transition-group(site-tabbar){animation:none;z-index:10}
+::view-transition-old(site-bar),::view-transition-new(site-bar),::view-transition-old(site-tabbar),::view-transition-new(site-tabbar){animation:none}
+::view-transition-old(root){animation:vt-out .18s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:vt-in .3s cubic-bezier(.2,.8,.2,1) both}
+::view-transition-group(car-photo){animation-duration:.32s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+@keyframes vt-out{to{opacity:0;transform:translateY(-6px) scale(.995)}}
+@keyframes vt-in{from{opacity:0;transform:translateY(10px)}}
+/* fallback for browsers without cross-document view transitions */
+html.nvt body{animation:pg-in .2s ease-out both}
+html.nvt.leaving body{opacity:0;transition:opacity .15s ease-in}
+@keyframes pg-in{from{opacity:0}}
+@media(prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}html.nvt body{animation:none}html.nvt.leaving body{opacity:1;transition:none}}
+#cardetail:empty{min-height:752px}@media(max-width:767px){#cardetail:empty{min-height:1000px}}
