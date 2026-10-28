@@ -4,15 +4,16 @@ $$('[data-brand]').forEach(e=>e.textContent=C.brand);
 $$('[data-yr]').forEach(e=>e.textContent=new Date().getFullYear());
 $$('[data-phone]').forEach(e=>{e.innerHTML=e.classList.contains('crow')?`<svg><use href="#i-phone"/></svg><span><small>Phone</small>${C.phone}</span>`:C.phone;e.href='tel:'+C.phone.replace(/\s/g,'')});
 $$('[data-email]').forEach(e=>{e.innerHTML=e.classList.contains('crow')?`<svg><use href="#i-mail"/></svg><span><small>Email <span class="ph">Placeholder</span></small>${C.email}</span>`:C.email;e.href='mailto:'+C.email});
+$$('[data-tel]').forEach(e=>e.href='tel:'+C.phone.replace(/\s/g,''));$$('[data-phone-txt]').forEach(e=>e.textContent=C.phone);$$('[data-email-plain]').forEach(e=>{e.textContent=C.email;e.href='mailto:'+C.email});
 $$('[data-address]').forEach(e=>e.textContent=C.address);$$('[data-hours]').forEach(e=>e.textContent=C.hours);
 const wa=t=>`https://wa.me/${C.whatsapp}?text=${encodeURIComponent(t)}`;
 $$('[data-wa]').forEach(a=>{a.href=wa(`Hi ${C.brand}, I'd like to rent a car.`);a.target='_blank';a.rel='noopener'});
 const inr=n=>n==null?'On request':'₹'+n.toLocaleString('en-IN');
 const gear=c=>c.trans==='Automatic'?'AT':'MT';
-const spec3=c=>`<div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div>`+(c.range?`<div><dt>Range <span class="ph">Example</span></dt><dd>${c.range}</dd></div>`:`<div><dt>Fuel</dt><dd>${c.fuel}</dd></div>`);
-const icon=c=>c.fuel==='Electric'?'i-bolt':c.id==='offroad'?'i-mtn':c.id==='luxury'?'i-wheel':'i-car';
+const spec3=c=>`<div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Drive</dt><dd>${c.drive}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div>`;
+const icon=c=>c.id==='offroader'?'i-mtn':'i-car';
 /* theme */
-const setTheme=t=>{document.documentElement.classList.add('theming');setTimeout(()=>document.documentElement.classList.remove('theming'),450);document.documentElement.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}$('meta[name=theme-color]').content=t==='light'?'#F6F4EF':'#0A0B0D'};
+const setTheme=t=>{document.documentElement.classList.add('theming');setTimeout(()=>document.documentElement.classList.remove('theming'),450);document.documentElement.dataset.theme=t;try{localStorage.setItem('theme',t)}catch(e){}$('meta[name=theme-color]').content=t==='light'?'#FAFAF8':'#0A0B0D'};
 $$('[data-theme-toggle]').forEach(b=>b.addEventListener('click',()=>setTheme(document.documentElement.dataset.theme==='light'?'dark':'light')));
 /* fleet cards */
 const card=(c,i)=>`<article class="cat tilt" data-i="${i}"><a class="cat-img" href="car.html?type=${c.id}" aria-label="${c.type} details"><img class="fade" src="${c.image}" alt="${c.type} — stock photo" loading="lazy" decoding="async" width="1200" height="750"><span class="ph">Stock photo</span><span class="cat-top"><svg><use href="#${icon(c)}"/></svg></span></a>
@@ -47,22 +48,32 @@ const cd=$('#cardetail');
 if(cd){const id=new URLSearchParams(location.search).get('type');const c=C.fleet.find(x=>x.id===id)||C.fleet[0];
 document.title=`${c.type} on rent — ${C.brand}`;
 cd.innerHTML=`<div class="cd-img"><img class="fade" src="${c.image}" alt="${c.type} — stock photo" width="1200" height="750" fetchpriority="high"><span class="ph">Stock photo</span></div>
-<div class="cd-copy"><a class="back" href="fleet.html">← All cars</a><p class="kicker">${c.fuel==='Electric'?'Electric':'Category'} · ${c.seats} seats · ${gear(c)}</p><h1 class="display md">${c.type}</h1>
+<div class="cd-copy"><a class="back" href="fleet.html">← All cars</a><p class="kicker">SUV class · ${c.seats} seats · ${c.drive}</p><h1 class="display md">${c.type}</h1>
 <p class="ex">${c.examples} <span class="ph">Example</span></p><p class="sub">${c.line}</p>
-<dl class="specs big"><div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div><div><dt>Fuel</dt><dd>${c.fuel}</dd></div>${c.range?`<div><dt>Range <span class="ph">Example</span></dt><dd>${c.range}</dd></div>`:''}</dl>
+<dl class="specs big"><div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div><div><dt>Drive</dt><dd>${c.drive}</dd></div><div><dt>Fuel</dt><dd>${c.fuel}</dd></div></dl><div class="uses-chips">${c.uses.map(u=>`<span>${u}</span>`).join('')}</div>
 <p class="price xl-price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}<span class="ph">Placeholder</span></p>
-<div class="hero-cta"><button class="btn press" data-type="${c.type}">Reserve ${c.type}<svg><use href="#i-arrow"/></svg></button><a class="link" data-wa href="${wa(`Hi ${C.brand}, question about the ${c.type}.`)}" target="_blank" rel="noopener">Ask on WhatsApp</a></div></div>`;
-$('#cd-included').innerHTML=['Doorstep delivery & pickup in Gurugram / Delhi NCR','360° video walkaround at handover and return','Comprehensive insurance','24×7 roadside & WhatsApp support',c.fuel==='Electric'?'Charging cable · charger map help':'Fuel policy: return at the level you got it','Driver option available'].map(x=>`<li><svg><use href="#i-check"/></svg>${x}</li>`).join('');
-const others=C.fleet.filter(x=>x.id!==c.id).slice(0,3);$('#cd-more').innerHTML=others.map(x=>card(x,C.fleet.indexOf(x))).join('')}
+<div class="hero-cta"><button class="btn press" data-type="${c.type}">Reserve this SUV<svg><use href="#i-arrow"/></svg></button><a class="link" data-wa href="${wa(`Hi ${C.brand}, question about the ${c.type}.`)}" target="_blank" rel="noopener">Ask on WhatsApp</a></div></div>`;
+$('#cd-included').innerHTML=['Doorstep delivery & pickup in Gurugram / Delhi NCR','360° video walkaround at handover and return','Comprehensive insurance','24×7 roadside & WhatsApp support','Recovery kit on hill & off-road trips','Driver option available'].map(x=>`<li><svg><use href="#i-check"/></svg>${x}</li>`).join('');
+const others=C.fleet.filter(x=>x.id!==c.id);$('#cd-more').innerHTML=others.map(x=>card(x,C.fleet.indexOf(x))).join('')}
+/* fleet showcase */
+const sc=$('#showcase');
+if(sc){sc.innerHTML=C.fleet.map((c,i)=>`<article class="show" data-id="${c.id}">
+<a class="show-img" href="car.html?type=${c.id}"><img class="fade" src="${c.image}" alt="${c.type} — stock photo" width="1200" height="750" ${i?'loading="lazy"':'fetchpriority="high"'}><span class="ph">Stock photo</span></a>
+<div class="show-body"><p class="kicker">${String(i+1).padStart(2,'0')} · ${c.short}</p><h2 class="display md">${c.type}</h2><p class="ex">${c.examples} <span class="ph">Example</span></p><p class="sub">${c.line}</p>
+<dl class="specs big"><div><dt>Seats</dt><dd>${c.seats}</dd></div><div><dt>Drive</dt><dd>${c.drive}</dd></div><div><dt>Gear</dt><dd>${gear(c)}</dd></div><div><dt>${c.roof?'Roof':'Fuel'}</dt><dd>${c.roof||c.fuel}</dd></div></dl>
+<div class="uses-chips">${c.uses.map(u=>`<span>${u}</span>`).join('')}</div>
+<div class="show-foot"><p class="price">${inr(c.price)}${c.price!=null?'<small>/day from</small>':''}<span class="ph">Placeholder</span></p><div class="row2"><a class="link" href="car.html?type=${c.id}">Details</a><button class="btn press" data-type="${c.type}">Reserve<svg><use href="#i-arrow"/></svg></button></div></div></div></article>`).join('');
+const sg=$('#segf');if(sg)sg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#segf button').forEach(x=>x.setAttribute('aria-pressed',x===b));$$('.show').forEach(s=>s.hidden=b.dataset.f!=='all'&&s.dataset.id!==b.dataset.f)})}
+const rq=$('#request');if(rq)rq.addEventListener('submit',e=>{e.preventDefault();const t=rq.querySelector('select').value;window.open(wa(`Hi ${C.brand}, I need a ${t} car. Dates: `),'_blank')});
 /* booking forms */
-$$('.typepick').forEach((tp,j)=>tp.innerHTML=C.fleet.map((c,i)=>`<label><input type="radio" name="car" value="${c.type}" ${i?'':'checked'}><span>${c.type}<small>${c.seats} seats · ${gear(c)}${c.fuel==='Electric'?' · EV':''}</small></span></label>`).join(''));
+$$('.typepick').forEach((tp,j)=>tp.innerHTML=C.fleet.map((c,i)=>`<label><input type="radio" name="car" value="${c.type}" ${i?'':'checked'}><span>${c.type}<small>${c.examples} · ${c.seats} seats</small></span></label>`).join(''));
 const d=new Date().toISOString().slice(0,10);let purpose='';
 $$('.bookform').forEach(f=>{f.from.min=f.to.min=d;f.from.addEventListener('change',()=>f.to.min=f.from.value);
 f.addEventListener('submit',e=>{e.preventDefault();const v=new FormData(f);
-window.open(wa(`Hi ${C.brand}, booking enquiry:\nCar type: ${v.get('car')}\nDrive: ${v.get('mode')}\nCity: ${v.get('city')}${purpose?`\nFor: ${purpose}`:''}\nPickup: ${v.get('from')} ${v.get('fromT')}\nReturn: ${v.get('to')} ${v.get('toT')}${v.get('note')?`\nNote: ${v.get('note')}`:''}`),'_blank')})});
+window.open(wa(`Hi ${C.brand}, booking enquiry:\nCar type: ${v.get('car')}\nDrive: ${v.get('mode')}\nCity: ${v.get('city')}${purpose?`\nFor: ${purpose}`:''}\nPickup: ${v.get('from')} ${v.get('fromT')}\nReturn: ${v.get('to')} ${v.get('toT')}${v.get('loc')?`\nPickup at: ${v.get('loc')}`:''}${v.get('note')?`\nNote: ${v.get('note')}`:''}`),'_blank')})});
 const sheetForm=$('.bookform.sheet-panel'),inlineForm=$('.bookform.inline');
 const B=document.body;const lock=on=>B.classList.toggle('locked',on);
-const openBook=type=>{const f=mob()?sheetForm:(sheetForm&&getComputedStyle(sheetForm).display!=='none'?sheetForm:inlineForm);
+const openBook=type=>{const _f=1;const f=mob()?sheetForm:(sheetForm&&getComputedStyle(sheetForm).display!=='none'?sheetForm:inlineForm);
 if(!f){location.href='contact.html'+(type?'?type='+encodeURIComponent(type):'');return}
 if(type){const r=f.querySelector(`input[name=car][value="${type}"]`);if(r)r.checked=true}
 if(mob()){B.classList.add('sheet');lock(true)}else{f.scrollIntoView({behavior:'smooth',block:'center'});f.classList.add('ping');setTimeout(()=>f.classList.remove('ping'),900)}};
@@ -73,6 +84,9 @@ if(t.matches('[data-close]'))return closeAll();
 if(t.matches('[data-open-more]')){B.classList.add('more');lock(true);return}
 if(t.dataset.trip){e.preventDefault();purpose=t.dataset.trip}closeAll();openBook(t.dataset.type)});
 addEventListener('keydown',e=>{if(e.key==='Escape')closeAll()});
+/* live summary (contact) */
+const sum=$('#sum');if(sum&&inlineForm){const up=()=>{const v=new FormData(inlineForm);const fmt=(d,t)=>d?new Date(d+'T'+(t||'10:00')).toLocaleString('en-IN',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'}):'—';
+const m={mode:v.get('mode'),car:v.get('car')||'—',from:fmt(v.get('from'),v.get('fromT')),to:fmt(v.get('to'),v.get('toT')),city:v.get('city')};$$('#sum [data-s]').forEach(e=>e.textContent=m[e.dataset.s])};inlineForm.addEventListener('input',up);inlineForm.addEventListener('change',up);up()}
 /* images */
 $$('img.fade').forEach(i=>{const s=()=>i.classList.add('ok');i.complete?s():i.addEventListener('load',s,{once:true})});
 /* header state: rAF-throttled, class only (no layout change) */
