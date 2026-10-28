@@ -81,6 +81,19 @@ $('#cd-included').innerHTML=['Doorstep delivery & pickup in Gurugram / Delhi NCR
 const others=C.fleet.filter(x=>x.id!==c.id).slice(0,4);$('#cd-more').innerHTML=others.map(x=>card(x,C.fleet.indexOf(x))).join('')}
 const qk=$('#quick');if(qk){const t0=new Date(),iso=d=>d.toISOString().slice(0,10),f1=qk.querySelector('[name=from]'),f2=qk.querySelector('[name=to]');f1.min=f2.min=iso(t0);f1.addEventListener('change',()=>{f2.min=f1.value;if(f2.value&&f2.value<f1.value)f2.value=f1.value});qk.addEventListener('submit',e=>{e.preventDefault();const v=new FormData(qk);window.open(wa(`Hi ${C.brand}, is a car available?\nPickup: ${v.get('city')}\nFrom: ${v.get('from')}\nTo: ${v.get('to')}`),'_blank','noopener')})}
 const rq=$('#request');if(rq)rq.addEventListener('submit',e=>{e.preventDefault();const t=rq.querySelector('select').value;window.open(wa(`Hi ${C.brand}, I need a ${t} car. Dates: `),'_blank')});
+/* journeys */
+const ITS=$$('.it');if(ITS.length){const nameOf=it=>it.querySelector('.it-act [data-trip]').dataset.trip.replace(/ trip$/,'');
+const tabs=$('#jtabs');tabs&&tabs.addEventListener('click',e=>{const b=e.target.closest('[data-jt]');if(!b)return;const v=b.dataset.jt;$$('#jtabs [data-jt]').forEach(x=>x.setAttribute('aria-pressed',x===b));ITS.forEach(it=>it.hidden=!!v&&it.dataset.dir!==v)});
+const h=location.hash&&document.getElementById(location.hash.slice(1));if(h&&h.matches('.it'))h.open=true;
+addEventListener('hashchange',()=>{const t=document.getElementById(location.hash.slice(1));if(t&&t.matches('.it'))t.open=true});
+const js=$('#jstats');if(js)js.innerHTML=[[ITS.length,'Itineraries'],[$$('#jtabs [data-jt]').length-1,'Directions'],['1–5','Days'],[C.fleet.length,C.fleet.length===1?'Car':'Cars']].map(([v,l])=>`<div><dd>${v}</dd><dt>${l}</dt></div>`).join('');
+const K={suv7:'E',offroader:'T'};
+const jc=$('#jcars');if(jc)jc.innerHTML=C.fleet.map(c=>{const im=c.cutout||c.image,sm=im.replace('.webp','-640.webp'),best=ITS.filter(it=>it.dataset.car===K[c.id]).map(it=>`<a href="#${it.id}">${nameOf(it)}</a>`);return `<article class="jcar"><a class="fc-stage${c.cutout||c.studio?'':' photo'}" href="car.html?id=${c.id}" aria-hidden="true" tabindex="-1"><span class="fc-cat">${c.category}</span><img src="${sm}" srcset="${sm} 640w, ${im} 1200w" sizes="(max-width:767px) 92vw, 560px" alt="${c.name}" loading="lazy" decoding="async" width="1200" height="750"></a>
+<div class="jcar-body"><h3><a href="car.html?id=${c.id}">${c.name}</a></h3><p class="jcar-line">${c.line||''}</p><p class="jcar-sp">${c.seats} seats · ${c.fuel} · ${c.trans} · ${c.drive}</p>
+${c.uses?`<ul class="jcar-uses">${c.uses.map(u=>`<li><svg aria-hidden="true"><use href="#i-check"/></svg>${u}</li>`).join('')}</ul>`:''}${best.length?`<p class="jcar-best"><small>Our pick for</small>${best.join(' · ')}</p>`:''}
+<button class="btn ghost sm press" data-type="${c.type}" aria-label="Reserve ${c.name}">Reserve ${c.name}<svg><use href="#i-arrow"/></svg></button></div></article>`}).join('');
+const jd=$('#jdest'),jp=$('#jplan');if(jd)jd.innerHTML=ITS.map(it=>`<option>${nameOf(it)}</option>`).join('')+'<option>Somewhere else</option>';
+if(jp)jp.addEventListener('submit',e=>{e.preventDefault();const v=new FormData(jp);window.open(wa(`Hi ${C.brand}, I'm planning a road trip.\nDestination: ${v.get('dest')}\nDrive: ${v.get('mode')}\nDates: `),'_blank','noopener')})}
 /* booking forms */
 $$('.typepick').forEach((tp,j)=>tp.innerHTML=C.fleet.map((c,i)=>`<label><input type="radio" name="car" value="${c.type}" ${i?'':'checked'}><span>${nm(c)}<small>${c.category||''} · ${c.seats} seats</small></span></label>`).join(''));
 const d=new Date().toISOString().slice(0,10);let purpose='';
