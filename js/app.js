@@ -67,6 +67,7 @@ cd.innerHTML=`<div class="cd-img${c.studio?" studio":""}"><img class="fade" src=
 <div class="hero-cta"><button class="btn press" data-type="${c.type}">Reserve this car<svg><use href="#i-arrow"/></svg></button><a class="link" data-wa href="${wa(`Hi ${C.brand}, question about the ${c.type}.`)}" target="_blank" rel="noopener">Ask on WhatsApp</a></div></div>`;
 $('#cd-included').innerHTML=['Doorstep delivery & pickup in Gurugram / Delhi NCR','360° video walkaround at handover and return','Comprehensive insurance','24×7 roadside & WhatsApp support','Recovery kit on hill & off-road trips','Driver option available'].map(x=>`<li><svg><use href="#i-check"/></svg>${x}</li>`).join('');
 const others=C.fleet.filter(x=>x.id!==c.id).slice(0,4);$('#cd-more').innerHTML=others.map(x=>card(x,C.fleet.indexOf(x))).join('')}
+const qk=$('#quick');if(qk){const t0=new Date(),iso=d=>d.toISOString().slice(0,10),f1=qk.querySelector('[name=from]'),f2=qk.querySelector('[name=to]');f1.min=f2.min=iso(t0);f1.addEventListener('change',()=>{f2.min=f1.value;if(f2.value&&f2.value<f1.value)f2.value=f1.value});qk.addEventListener('submit',e=>{e.preventDefault();const v=new FormData(qk);window.open(wa(`Hi ${C.brand}, is a car available?\nPickup: ${v.get('city')}\nFrom: ${v.get('from')}\nTo: ${v.get('to')}`),'_blank','noopener')})}
 const rq=$('#request');if(rq)rq.addEventListener('submit',e=>{e.preventDefault();const t=rq.querySelector('select').value;window.open(wa(`Hi ${C.brand}, I need a ${t} car. Dates: `),'_blank')});
 /* booking forms */
 $$('.typepick').forEach((tp,j)=>tp.innerHTML=C.fleet.map((c,i)=>`<label><input type="radio" name="car" value="${c.type}" ${i?'':'checked'}><span>${nm(c)}<small>${c.category||''} · ${c.seats} seats</small></span></label>`).join(''));
@@ -74,7 +75,7 @@ const d=new Date().toISOString().slice(0,10);let purpose='';
 $$('.bookform').forEach(f=>{f.from.min=f.to.min=d;f.from.addEventListener('change',()=>f.to.min=f.from.value);
 f.addEventListener('submit',e=>{e.preventDefault();const v=new FormData(f);
 window.open(wa(`Hi ${C.brand}, booking enquiry:\nCar type: ${v.get('car')}\nDrive: ${v.get('mode')}\nCity: ${v.get('city')}${purpose?`\nFor: ${purpose}`:''}\nPickup: ${v.get('from')} ${v.get('fromT')}\nReturn: ${v.get('to')} ${v.get('toT')}${v.get('loc')?`\nPickup at: ${v.get('loc')}`:''}${v.get('note')?`\nNote: ${v.get('note')}`:''}`),'_blank')})});
-const sheetForm=$('.bookform.sheet-panel'),inlineForm=$('.bookform.inline');
+const sheetForm=$('.bookform.sheet-panel'),inlineForm=$('.bookform.inline')||$('#quick');
 const B=document.body;const lock=on=>B.classList.toggle('locked',on);
 const openBook=type=>{const _f=1;const f=mob()?sheetForm:(sheetForm&&getComputedStyle(sheetForm).display!=='none'?sheetForm:inlineForm);
 if(!f){location.href='contact.html'+(type?'?type='+encodeURIComponent(type):'');return}
