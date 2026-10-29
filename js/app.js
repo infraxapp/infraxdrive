@@ -135,3 +135,69 @@ let u;try{u=new URL(a.href,location.href)}catch(_){return}if(u.origin!==location
 const im=a.matches('.cat-img,.show-img')&&a.querySelector('img');if(im&&!H.classList.contains('nvt'))im.style.viewTransitionName='car-photo';
 if(H.classList.contains('nvt')&&!rm){e.preventDefault();H.classList.add('leaving');setTimeout(()=>{location.href=u.href},150)}});
 addEventListener('pageshow',()=>{H.classList.remove('leaving');document.querySelectorAll('img[style*="view-transition-name"]').forEach(i=>i.style.viewTransitionName='')})})();
+/* ===== custom pickers: select, time, date range ===== */
+(()=>{const $$=(s,r=document)=>[...r.querySelectorAll(s)],mob=()=>matchMedia('(max-width:767px)').matches,B=document.body;
+const ev=(el,t)=>el.dispatchEvent(new Event(t,{bubbles:true}));
+const chev='<svg class="pk-chev" aria-hidden="true"><use href="#i-chev"/></svg>';
+let scrim=document.createElement('div');scrim.className='pk-scrim';B.appendChild(scrim);
+let cur=null;const close=(f)=>{if(!cur)return;const c=cur;cur=null;c.pop.classList.remove('open');scrim.classList.remove('open');c.btn.setAttribute('aria-expanded','false');if(f)c.btn.focus();c.onclose&&c.onclose()};
+const place=(btn,pop)=>{if(mob()){pop.classList.add('sheet');pop.style.left=pop.style.top='';return}pop.classList.remove('sheet');const r=btn.getBoundingClientRect(),w=pop.offsetWidth,h=pop.offsetHeight;let l=Math.min(r.left,innerWidth-w-12),t=r.bottom+8;if(t+h>innerHeight-8&&r.top-h-8>8)t=r.top-h-8;pop.style.left=Math.max(12,l)+'px';pop.style.top=t+'px'};
+const open=(c)=>{if(cur&&cur!==c)close();cur=c;c.onopen&&c.onopen();c.pop.classList.add('open');place(c.btn,c.pop);if(mob())scrim.classList.add('open');c.btn.setAttribute('aria-expanded','true');c.focus&&c.focus()};
+scrim.addEventListener('click',()=>close());
+document.addEventListener('pointerdown',e=>{if(cur&&!cur.pop.contains(e.target)&&!cur.btn.contains(e.target)&&!(cur.alt||[]).some(b=>b.contains(e.target)))close()},true);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&cur){e.stopPropagation();close(1)}},true);
+addEventListener('resize',()=>cur&&place(cur.btn,cur.pop));addEventListener('scroll',()=>{if(cur&&!mob())place(cur.btn,cur.pop)},{passive:true});
+let uid=0;
+/* list picker (used by select + time) */
+const list=(native,opts,getV,setV,icon)=>{const id='pk'+(++uid);const btn=document.createElement('button');btn.type='button';btn.className='pk-btn';btn.setAttribute('aria-haspopup','listbox');btn.setAttribute('aria-expanded','false');
+const lab=native.closest('label');const ln=lab&&lab.querySelector('span');
+const pop=document.createElement('div');pop.className='pk-pop pk-list';pop.id=id;pop.setAttribute('role','listbox');pop.tabIndex=-1;btn.setAttribute('aria-controls',id);
+const title=(ln&&ln.textContent||native.getAttribute('aria-label')||'').trim();
+const paint=()=>{const v=getV(),o=opts().find(o=>o[0]===v)||opts()[0];btn.innerHTML=(icon?`<svg class="pk-ic" aria-hidden="true"><use href="#${icon}"/></svg>`:'')+`<span class="pk-val">${o?o[1]:''}</span>`+chev;const _l=(native.getAttribute('aria-label')||(native.closest('label')&&native.closest('label').querySelector('span')||{}).textContent||native.name||'Choose').trim();btn.setAttribute('aria-label',_l+': '+(o?o[1]:''))};
+const build=()=>{const v=getV();pop.innerHTML=(title?`<p class="pk-title">${title}</p>`:'')+'<div class="pk-opts">'+opts().map(([val,l])=>`<button type="button" role="option" class="pk-opt" data-v="${val}" aria-selected="${val===v}">${icon?`<svg class="pk-ic" aria-hidden="true"><use href="#${icon}"/></svg>`:''}<span>${l}</span><svg class="pk-ck" aria-hidden="true"><use href="#i-check"/></svg></button>`).join('')+'</div>'};
+const c={btn,pop,onopen:build,focus:()=>{const s=pop.querySelector('[aria-selected=true]')||pop.querySelector('.pk-opt');s&&s.focus({preventScroll:true});s&&s.scrollIntoView({block:'nearest'})}};
+pop.addEventListener('click',e=>{const o=e.target.closest('.pk-opt');if(!o)return;setV(o.dataset.v);paint();close(1)});
+pop.addEventListener('keydown',e=>{const os=$$('.pk-opt',pop),i=os.indexOf(document.activeElement);if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();const n=os[Math.max(0,Math.min(os.length-1,i+(e.key==='ArrowDown'?1:-1)))];n&&n.focus()}else if(e.key==='Home'){e.preventDefault();os[0].focus()}else if(e.key==='End'){e.preventDefault();os[os.length-1].focus()}else if(e.key==='Tab')close()});
+btn.addEventListener('click',e=>{e.preventDefault();cur===c?close():open(c)});
+btn.addEventListener('keydown',e=>{if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();open(c)}});
+native.classList.add('pk-native');native.tabIndex=-1;native.setAttribute('aria-hidden','true');native.after(btn);B.appendChild(pop);
+native.addEventListener('change',paint);paint();if(lab)lab.addEventListener('click',e=>{if(!btn.contains(e.target)&&e.target!==native){e.preventDefault();btn.click()}});return c};
+$$('select').forEach(s=>{if(s.closest('.pk-pop'))return;const o=()=>[...s.options].map(o=>[o.value,o.textContent]);list(s,o,()=>s.value,v=>{s.value=v;ev(s,'input');ev(s,'change')},s.name==='city'?'i-pin':null)});
+const fmtT=t=>{const[h,m]=t.split(':').map(Number);return `${(h%12)||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`};
+const slots=[];for(let h=0;h<24;h++)for(const m of['00','30'])slots.push([`${String(h).padStart(2,'0')}:${m}`,fmtT(`${h}:${m}`)]);
+$$('input[type=time]').forEach(t=>list(t,()=>slots,()=>t.value||'10:00',v=>{t.value=v;ev(t,'input');ev(t,'change')},'i-clock'));
+/* date range */
+const p2=n=>String(n).padStart(2,'0'),iso=d=>`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`,par=s=>{if(!s)return null;const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const WD=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],MO=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],MF=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const fmt=d=>d?`${WD[d.getDay()]}, ${d.getDate()} ${MO[d.getMonth()]}`:'Add date';
+const today=()=>{const t=new Date();return new Date(t.getFullYear(),t.getMonth(),t.getDate())},add=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n),diff=(a,b)=>Math.round((b-a)/864e5);
+const forms=new Set($$('input[type=date][name=from]').map(i=>i.form).filter(Boolean));
+forms.forEach(f=>{const A=f.querySelector('input[name=from]'),Z=f.querySelector('input[name=to]');if(!A||!Z)return;
+const t0=today();if(!A.value)A.value=iso(t0);if(!Z.value||Z.value<=A.value)Z.value=iso(add(par(A.value),1));
+const mk=(inp)=>{const b=document.createElement('button');b.type='button';b.className='pk-btn pk-date';b.setAttribute('aria-haspopup','dialog');b.setAttribute('aria-expanded','false');const ln=inp.closest('label')&&inp.closest('label').querySelector('span');b.setAttribute('aria-label',(ln?ln.textContent.trim():inp.name)+': '+fmt(par(inp.value)));inp.classList.add('pk-native');inp.tabIndex=-1;inp.setAttribute('aria-hidden','true');inp.after(b);const lab=inp.closest('label');if(lab)lab.addEventListener('click',e=>{if(!b.contains(e.target)){e.preventDefault();b.click()}});return b};
+const bA=mk(A),bZ=mk(Z);
+const paint=()=>{[[A,bA],[Z,bZ]].forEach(([i,b])=>{const d=par(i.value);b.innerHTML=`<span class="pk-val">${fmt(d)}</span>`;const ln=i.closest('label')&&i.closest('label').querySelector('span');b.setAttribute('aria-label',(ln?ln.textContent.trim():i.name)+': '+fmt(d))})};paint();
+const pop=document.createElement('div');pop.className='pk-pop pk-cal';pop.setAttribute('role','dialog');pop.setAttribute('aria-label','Choose pickup and return dates');B.appendChild(pop);
+let s,e,view,hov=null;
+const months=()=>mob()?1:2;
+const grid=(y,m)=>{const first=new Date(y,m,1),off=(first.getDay()+6)%7,n=new Date(y,m+1,0).getDate();let h=`<div class="pk-mo"><p class="pk-mt">${MF[m]} ${y}</p><div class="pk-wd">${['Mo','Tu','We','Th','Fr','Sa','Su'].map(x=>`<span>${x}</span>`).join('')}</div><div class="pk-days" role="grid">`;
+for(let i=0;i<off;i++)h+='<span></span>';const T=today();
+for(let d=1;d<=n;d++){const dt=new Date(y,m,d),k=iso(dt),past=dt<T,isS=s&&k===iso(s),isE=e&&k===iso(e),end=e||(hov&&s&&hov>s?hov:null),inR=s&&end&&dt>s&&dt<end,dis=past||(s&&!e&&dt<=s&&false);
+h+=`<button type="button" class="pk-d${isS?' s':''}${isE||(!e&&hov&&end&&k===iso(end))?' e':''}${inR?' r':''}${k===iso(T)?' t':''}${isS&&!end?' solo':''}" data-d="${k}" ${past?'disabled':''} aria-pressed="${!!(isS||isE)}" aria-label="${WD[dt.getDay()]} ${d} ${MF[m]} ${y}">${d}</button>`}
+return h+'</div></div>'};
+const render=()=>{const n=months();let h=`<div class="pk-calhead"><button type="button" class="pk-nav" data-nav="-1" aria-label="Previous month" ${view<=new Date(today().getFullYear(),today().getMonth(),1)?'disabled':''}><svg><use href="#i-chev"/></svg></button><p class="pk-sel"><span class="${!e&&s?'':'on'}">${fmt(s)}</span><svg aria-hidden="true"><use href="#i-arrow"/></svg><span class="${s&&!e?'on':''}">${e?fmt(e):'Return'}</span></p><button type="button" class="pk-nav nx" data-nav="1" aria-label="Next month"><svg><use href="#i-chev"/></svg></button></div><div class="pk-months">`;
+for(let i=0;i<n;i++){const d=new Date(view.getFullYear(),view.getMonth()+i,1);h+=grid(d.getFullYear(),d.getMonth())}
+const days=s&&e?diff(s,e):0;h+=`</div><div class="pk-foot"><p class="pk-count">${days?`<b>${days} day${days>1?'s':''}</b> · ${days} night${days>1?'s':''}`:(s?'Pick a return date':'Pick a pickup date')}</p><button type="button" class="pk-clear">Clear</button><button type="button" class="btn sm pk-done" ${s&&e?'':'disabled'}>Done</button></div>`;pop.innerHTML=h};
+const c={btn:bA,alt:[bA,bZ],pop,onopen:()=>{s=par(A.value);e=par(Z.value);view=new Date((s||today()).getFullYear(),(s||today()).getMonth(),1);render()},focus:()=>{const x=pop.querySelector('.pk-d.s')||pop.querySelector('.pk-d:not([disabled])');x&&x.focus({preventScroll:true})}};
+const openAt=(which,b)=>{c.btn=b;open(c);if(which==='to'&&s){e=null;render();const x=pop.querySelector('.pk-d.s');x&&x.focus({preventScroll:true})}};
+bA.addEventListener('click',()=>cur===c&&c.btn===bA?close():openAt('from',bA));bZ.addEventListener('click',()=>cur===c&&c.btn===bZ?close():openAt('to',bZ));
+const apply=()=>{A.value=iso(s);Z.value=iso(e);[A,Z].forEach(i=>{ev(i,'input');ev(i,'change')});paint();close(1)};
+pop.addEventListener('click',ev2=>{const t=ev2.target.closest('button');if(!t)return;
+if(t.dataset.nav){view=new Date(view.getFullYear(),view.getMonth()+ +t.dataset.nav,1);render();return}
+if(t.classList.contains('pk-clear')){s=e=null;render();return}
+if(t.classList.contains('pk-done')){if(s&&e)apply();return}
+if(t.dataset.d){const d=par(t.dataset.d);if(!s||e){s=d;e=null}else if(d<=s){s=d}else{e=d}render();const k=pop.querySelector(`[data-d="${t.dataset.d}"]`);k&&k.focus({preventScroll:true})}});
+pop.addEventListener('pointerover',x=>{const t=x.target.closest('.pk-d');if(!t||!s||e)return;const d=par(t.dataset.d);if(+d===+hov)return;hov=d;$$('.pk-d',pop).forEach(b=>{const bd=par(b.dataset.d);b.classList.toggle('r',bd>s&&bd<hov);b.classList.toggle('e',+bd===+hov&&hov>s);b.classList.toggle('solo',+bd===+s&&!(hov>s))})});
+pop.addEventListener('keydown',x=>{const t=document.activeElement;if(!t||!t.dataset||!t.dataset.d)return;const m={ArrowLeft:-1,ArrowRight:1,ArrowUp:-7,ArrowDown:7}[x.key];if(m==null)return;x.preventDefault();const nd=add(par(t.dataset.d),m);if(nd<today())return;let b=pop.querySelector(`[data-d="${iso(nd)}"]`);if(!b){view=new Date(view.getFullYear(),view.getMonth()+(m>0?1:-1),1);render();b=pop.querySelector(`[data-d="${iso(nd)}"]`)}b&&b.focus()});
+});
+})();
